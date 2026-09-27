@@ -21,7 +21,6 @@ metadados["num_palavras"] = metadados["texto"].str.split().str.len()
 
 print("----------------------------------------------------------------------------------Parte 0")
 print(metadados[["doc_id", "status", "num_palavras"]])
-
 print(metadados["status"].value_counts())
 
 #---Parte 1
@@ -53,20 +52,18 @@ for _, linha in metadados.iterrows():
 
 df_chunks = pd.DataFrame(lista_chunks)
 
-print("----------------------------------------------------------------------------------Parte 1")
+print("\n----------------------------------------------------------------------------------Parte 1")
 print("Total de chunks:", len(df_chunks))
 print(df_chunks.groupby("doc_id").size())
 print(df_chunks.iloc[0].to_dict())  # exemplo completo de 1 chunk
-
 #---Parte 2
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 vetorizador = TfidfVectorizer(lowercase=True)
 matriz_chunks = vetorizador.fit_transform(df_chunks["texto"])
-print("------------Parte 2")
-print(matriz_chunks.shape) 
-
+print("\n----------------------------------------------------------------------------------Parte 2")
+print(matriz_chunks.shape)
 #---Parte 3
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -84,19 +81,19 @@ def buscar(pergunta, k=3, apenas_vigentes = True):
     resultado = resultado.sort_values("score", ascending=False).head(k)
     return resultado[["doc_id", "secao", "score"]]
 
-print("----------------------------------------------------------------------Parte 3")
+print("\n----------------------------------------------------------------------------------Parte 3")
 print("---------------------------------P01---------------------------------")
 print(buscar("Com quantos dias de antecedência devo solicitar minhas férias?", k=3))
-print("---------------------------------P02---------------------------------")
-print(buscar("Quantos dias por semana posso trabalhar de forma remota?", k=3)) 
-print("---------------------------------P10---------------------------------")
+print("\n---------------------------------P02---------------------------------")
+print(buscar("Quantos dias por semana posso trabalhar de forma remota?", k=3),) 
+print("\n---------------------------------P10---------------------------------")
 print(buscar("Qual é a política de estacionamento da empresa?", k=3))  
 
-#----------------------------------------------------------------------------------Parte 4
+#---Parte 4
+print("\n----------------------------------------------------------------------------------Parte 4")
 gabarito = pd.read_csv("insumos_Desafio_Bootcamp_SEP26/perguntas_gabarito.csv")
-"""print(gabarito)"""
 
-# definição de threshold 0.28
+print("\n-----------------definindo threshold-----------------")
 for _, linha in gabarito.iterrows():
     top1 = buscar(linha["pergunta"], k=1)
     score = top1.iloc[0]["score"]
@@ -136,13 +133,13 @@ def imprimir_resposta(r):
     print(f"SCORE: {r['SCORE']}")
     print(f"STATUS: {r['STATUS']}")
 
-print("----------------------------------------------------------------------------------Parte 4")
-print("-------------------------------------------P02-------------------------------------------")
+
+print("\n-------------------------------------------P02-------------------------------------------")
 imprimir_resposta(responder("Quantos dias por semana posso trabalhar de forma remota?"))
-print("-------------------------------------------P10-------------------------------------------")
+print("\n-------------------------------------------P10-------------------------------------------")
 imprimir_resposta(responder("Qual é a política de estacionamento da empresa?"))
 
-#----------------------------------------------------------------------------------Parte 5
+#---Parte 5
 linhas_avaliacao = []
 
 for _, linha in gabarito.iterrows():
@@ -163,7 +160,7 @@ for _, linha in gabarito.iterrows():
     })
 
 df_avaliacao = pd.DataFrame(linhas_avaliacao)
-print("----------------------------------------------------------------------------------Parte 5")
+print("\n----------------------------------------------------------------------------------Parte 5")
 print(df_avaliacao)
 
 perguntas_com_resposta = gabarito[gabarito["doc_esperado"] != "nao_encontrado"]
